@@ -1,0 +1,1250 @@
+{
+  "name": "Agent-Create-WordPress-WeeklyAINewsPost",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                4
+              ]
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1376,
+        3472
+      ],
+      "id": "a5886c49-a240-4a3b-a70f-33bb31ccc8c9",
+      "name": "Weekly Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://c1mdev.com/c1m.ai/wp-json/wp/v2/media",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Disposition",
+              "value": "=attachment; filename=\"{{ Array.from({length: 8}, () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.charAt(Math.floor(Math.random() * 62))).join('') }}.png\""
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        3456
+      ],
+      "id": "0674b8c1-beca-4871-80b7-665a622630ac",
+      "name": "upload_featured_image",
+      "notesInFlow": true,
+      "credentials": {
+        "wordpressApi": {
+          "id": "5XDxp96ebhDABLlq",
+          "name": "Wordpress dev account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## GPT image 1 (Image Generator)\n\nThis node generates a cinematic, high-resolution image description for a technology blog post. It uses dynamic content from the incoming JSON to create a photo concept styled for realistic, professional photography with shallow depth of field and high-end lighting.\n\n**Dynamic Inputs Used:**\n\n* Blog post title (`post_details.title`)\n* Visual concept for the image (`image_prompt`)\n\n**Purpose:**\nTo create AI image prompts suitable for GPT Image 1, Midjourney, or similar tools — enhancing blog content with high-quality visuals that match the article theme and tone.\n",
+        "height": 896,
+        "width": 416
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        432,
+        2768
+      ],
+      "typeVersion": 1,
+      "id": "4c713edb-b070-4fce-9a57-9e1d0c743101",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fb3f02bf-d730-44fd-ae08-fbf5ba71986b",
+              "name": "PropertyID",
+              "value": "188375",
+              "type": "string"
+            },
+            {
+              "id": "262456ed-b2b6-4a2f-a1d7-b330f16c8a84",
+              "name": "PostTitle",
+              "value": "={{ $('SEO strategist and AI content writer1').first().json.output.post_details.title }}",
+              "type": "string"
+            },
+            {
+              "id": "58f2975e-327e-43e8-b442-617f857a03d4",
+              "name": "PostContent",
+              "value": "={{ $('SEO strategist and AI content writer1').first().json.output.post_details.post }}",
+              "type": "string"
+            },
+            {
+              "id": "45987bfb-8311-4d8f-b66a-a627ecabf056",
+              "name": "PostStatus",
+              "value": "draft",
+              "type": "string"
+            },
+            {
+              "id": "1e7e41e7-d7e3-4c87-b997-bac1a6b89df2",
+              "name": "FeaturedImageURL",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "e3cb0c30-48da-4e05-bc8d-b75a564fe148",
+              "name": "Categories",
+              "value": "=[1146,1172,79,1158,1211]",
+              "type": "array"
+            },
+            {
+              "id": "2bb4ae88-4db2-4cc0-ab65-51a195564eb0",
+              "name": "Tags",
+              "value": "[1210]",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        944,
+        3456
+      ],
+      "id": "bf7e8334-b430-4681-8464-9a2a3c56ba30",
+      "name": "WordPress Payload1"
+    },
+    {
+      "parameters": {
+        "content": "##   **Asana Task Creation Workflow**\n\nThis flow automates the creation of an Asana task based on input post metadata (title, link, ID, etc.). It includes the following components:\n\n1. **Assignee ID Setup**\n\n   * A `Set` node defines the `assigneeId`, used to assign the task to a specific team member.\n\n2. **TOOL-Project-Task-Create-Payload**\n\n   * A `Code` node that dynamically constructs the task payload, including:\n\n     * Task name (`#WordpressPostApproval`)\n     * Task notes (title, link, post ID, and review instructions)\n     * Assignee ID\n     * Target project ID (`AI R&D` project)\n   * Due date is set to 5 days from current date.\n\n3. **TOOL-Project-Task-Create**\n\n   * Sends the generated payload to an internal webhook **(TOOL-Project-Task-Create)** that handles actual task creation in Asana.\n\n---\n\n### Use Case:\n\nThis module is used to create review/approval tasks in Asana automatically when a new WordPress post is drafted.\nTeam members can approve the post by marking the task as complete or leave structured feedback as comments.\n\n\n\n",
+        "height": 944,
+        "width": 688
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1568,
+        2720
+      ],
+      "typeVersion": 1,
+      "id": "225d454a-9dc3-4f47-8507-c6cff955ccfb",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "jsCode": "\n//Note : If you want to change the task name, please make sure to update it in the TOOL Asana Task Analyser as well.\nconst postDetails = $('Invoke Tool-Create-WordPress-Post-ImageOptional').first().json;\nconst taskName = \"#WordpressPostApproval\";\nconst taskDescription = `TITLE : ${postDetails.title.raw},\\n\nLINK  : ${postDetails.link},\\n\nGENERATED BY : AI News,\\n\nPOSTID: ${postDetails.id},\\n\nSTRATEGY: \"Review the draft and share your approval or feedback\",\\n\nNOTE   : To approve the post, please mark the task as complete. \\\nIf you have any feedback, comment below using this format —\\n\n#FEEDBACK\\n\n• Changes: [What needs updating]\\n\n `;\nconst currentDate = new Date();\ncurrentDate.setDate(currentDate.getDate() + 5);\n\n// Doug king as assignee (You can change it previous set node)\nconst assigneeId = $input.first().json.assigneeId;\n//AI R&D project id \nconst projectId = \"1204593007076468\";\n \nreturn {\n  \"projects\": [ projectId ],\n  \"name\": taskName,\n  \"workspace\": \"889210627409604\",\n  \"parent\": null,\n  \"tags\": [],\n  \"followers\": [],\n  \"assignee_section\": \"null\",\n  \"assignee\": assigneeId,\n  \"start_on\": null,\n  \"start_at\": null,\n  \"notes\": taskDescription,\n  \"liked\": false,\n  \"due_on\": null,\n  \"due_at\": null,\n  \"completed\": false,\n  \"assignee_status\": \"upcoming\",\n  \"resource_subtype\": \"default_task\"\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1824,
+        3424
+      ],
+      "id": "1c739588-ff4d-47ae-854c-8cf329840048",
+      "name": "TOOL-Project-Task-Create-Payload1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.c1m.ai/webhook/cd823c93-0aeb-424e-a215-f69bb06ff7f5",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2032,
+        3424
+      ],
+      "id": "e8b8fb86-5caf-41d8-8888-af6803cad5b5",
+      "name": "TOOL-Project-Task-Create1",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "## Prepare & Send WordPress Draft Post\n\nThis section of the workflow prepares and sends a blog post draft to a WordPress webhook.\n\n1. **WordPress Payload Node**\n   * Assembles post data including:\n\n     * `PropertyID` (static)\n     * `PostTitle`, `PostContent` (fetched dynamically from an earlier GPT-generated response)\n     * `PostStatus` (set as `\"draft\"`)\n     * `FeaturedImageURL` (from image generation output)\n   * Formats the data into a JSON object suitable for WordPress ingestion.\n\n2. **Draft WordPress Post Node**\n   * Sends the assembled payload via `HTTP POST` to a specified Webhook URL on `n8n.c1m.ai`: **TOOL-CreatePost-WordPress-ImagesNotMandatory**.\n   * This action simulates submitting a new blog post to WordPress in draft mode, allowing for later human review or publishing automation.\n\n**Use Case:**\nAutomates the pipeline from AI-generated content to WordPress-ready post drafts using structured payloads and webhook integration.\n",
+        "height": 896,
+        "width": 672,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        864,
+        2768
+      ],
+      "typeVersion": 1,
+      "id": "0473ecb4-21b3-4280-aade-4d15a8d5e945",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "messages": {
+          "message": [
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "simplify": true,
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexity",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        3472
+      ],
+      "id": "c1872f6a-11e7-4c57-9c93-fb01fbfeaf8d",
+      "name": "Search latest AI Trend News1",
+      "retryOnFail": true,
+      "credentials": {
+        "perplexityApi": {
+          "id": "csIo8NMXQo1ykibm",
+          "name": "Perplexity account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "messages": {
+          "message": [
+            {
+              "content": "= You are a meticulous AI fact-checker. Your task is to strictly validate the factual accuracy of a structured news report by reviewing each headline and summary in the `message` against the provided `citations`, and—if necessary—official public sources.\n\n### Input\n\n\"citations\": {{ $json.citations }},\n\"message\": {{ $json.message }}\n\n###  Instructions:\n\n1. Primary Verification\n   Use the URLs listed in the `citations` array to verify each item in the `message`.\n\n2. Secondary Verification (if not found in citations)\n   If a claim is not fully supported in the provided citations, cross-check it using only official and trustworthy public sources, such as:\n\n   * Company blogs or press rooms (e.g., OpenAI, Anthropic, Microsoft, Google, NVIDIA)\n   * Research archives (e.g., arXiv.org, ACL Anthology)\n   * Public model leaderboards (e.g., Papers With Code, LMSYS leaderboard)\n\n   Do not use speculative sources, personal blogs, forums, or social media.\n    If no official support is found, exclude the news item from the final report.\n\n3. For each news item, check:\n\n   * Does the headline or core claim appear in any of the citations or official sources?\n   * Does the summary accurately reflect the article content?\n   * Is the publication date consistent with the actual article or source?\n\n4. If a news item references an external site (e.g., Fortune.com, Business Standard) that is not included in citations or verified official sources, mark it Unverified.\n\n5. Do not rely on prior knowledge or assumptions. Only validate claims supported by explicit information in the citations or approved sources.\n\n6. Be conservative. Avoid speculation.\n\n7. Always exclude Non major or non verified AI news.\n\n8. Get fatcs only for the major and verified AI news.\n\n## Output Format\nGenerate a clean, fact-checked version of the news report. Include only verified items. Exclude any unverified entries.\nEach verified news item should follow this structure:\n\nHeadline: [Accurate title here]  \nSummary: [Concise, fact-checked summary based on source]  \nDate: [Publication date]  \nSource: [Source Name](https://link.com)\n* Maintain coverage for all listed companies and sources, not just the first one mentioned.\n\n\nOnly include news items that are Verified. Exclude and entries from the final report.\n\nUse the `citations` list to validate the `message` content. Cross-check with official sources only if needed. Do not generate or assume facts not found in the citations or trusted official sources. It’s acceptable to return fewer items if that preserves factual integrity.\n\n## Ensure coverage includes all listed companies and sources, not just the first one mentioned.\n\n## Important Rule(Must follow): \n* Get fatcs only for the major and verified AI news."
+            }
+          ]
+        },
+        "simplify": true,
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexity",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        3472
+      ],
+      "id": "93b08190-3615-4937-92d0-cd4c36b40a3f",
+      "name": "Fact Checking1",
+      "retryOnFail": true,
+      "credentials": {
+        "perplexityApi": {
+          "id": "csIo8NMXQo1ykibm",
+          "name": "Perplexity account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "218e4628-97da-4c91-8f7b-dcc173294155",
+              "name": "assigneeId",
+              "value": "1211114623279818",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1632,
+        3424
+      ],
+      "id": "2da098e2-25a6-4418-aea5-7b8cf14b46e8",
+      "name": "Set Assignee Id1"
+    },
+    {
+      "parameters": {
+        "content": "## SEO Strategy & Blog Post Draft Generator with CM1's brand voice\n\nThis flow uses OpenAI (GPT-4o) to **generate SEO-optimized blog content** from provided AI news input. The output is strictly grounded in the input data — no external facts, assumptions, or dates are allowed.\n\n####  Node Breakdown:\n* **Node:** `SEO strategist and AI content writer`\n* **Function:** Performs 3 structured tasks using *only* the provided AI news content:\n\n  1. **SEO Strategy**: Extracts primary and long-tail keywords + suggests target word count.\n  2. **Blog Post Draft**: Crafts a WordPress-ready HTML blog post using C1M brand tone.\n  3. **AI Image Prompt**: Creates a brand-aligned, technically accurate prompt for image generation tools (like DALL·E).\n\n#### Features:\n* Ensures evergreen content (no date bias unless present in source)\n* Output format is strict JSON with `SEO`, `post_details`, and `image_prompt`\n* Adheres to [C1M](https://c1m.ai/) voice: expert, strategic, clear, and brand-conscious\n\n",
+        "height": 896,
+        "width": 608,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -192,
+        2768
+      ],
+      "typeVersion": 1,
+      "id": "1ae07eec-7cfa-4cc0-949c-6892182c9bd5",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "## AI News Aggregation and Fact-Checking (14-Day Window)\n\nThis workflow automates the process of collecting and validating the most recent developments in the AI industry. It performs three main steps:\n\n* **Node 1: News Prompt with Dynamic Date**\n  Generates a date-based prompt covering AI breakthroughs, model updates, fine-tuning trends, and company-specific news.\n\n* **Node 2: Search latest AI Trend News**\n  Sends the prompt to Perplexity Sonar to retrieve structured AI news with sources and summaries.\n\n* **Node 3: Fact Checking**\n  Validates each news item against provided citations and official sources (e.g., blogs, arXiv, benchmarks), and filters out unverified content.\n\n### Final Output\nThe final result is a **fact-checked AI news digest**, focused strictly on trustworthy sources and recent developments in the last 14 days—perfect for newsletters, dashboards, or internal team updates.\n\n",
+        "height": 896,
+        "width": 704
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -928,
+        2768
+      ],
+      "typeVersion": 1,
+      "id": "b4a52534-67b7-4157-9536-91e2274a3979",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date();\nconst pastDate = new Date();\npastDate.setDate(now.getDate() - 8);\n\n// Format the date range\nconst formatDate = (date) => {\n  const options = { year: 'numeric', month: 'long', day: 'numeric' };\n  return date.toLocaleDateString('en-US', options);\n};\n\nconst dateRange = `${formatDate(pastDate)} to ${formatDate(now)}`;\n\n// Prompt with dynamic 2-week date range\nconst prompt = `You are an expert, top AI news analyst. Your role is to collect the most recent, accurate AI news published between ${dateRange}, and present it clearly with source links, dates, and business relevance.\nSources to Search\n1. Official company blogs and press rooms\n2. Research repositories (e.g., arXiv)\n3. Reputable tech media and industry news platforms\n4. Public benchmarks or model tracking dashboards\n5. Primary Priority: Search all AI trend news on FutureTools (https://www.futuretools.io/news) and CuriousRefuge (https://curiousrefuge.com/blog) first, then research:\n    * https://www.crescendo.ai/news/latest-ai-news-and-updates\n    * https://www.therundown.ai/\n    * https://www.superhuman.ai/\n    * https://theresanaiforthat.com/\n    * https://www.theneurondaily.com/\nPriority: Only news released in the past 1 week. Avoid : outdated, speculative, or unverified sources.\n\nFocus Areas\nCollect AI trend news for major AI models: GPT-5, Claude, Gemini, LLaMA, and others. Include only:\n* Model updates, enhancements, or new capabilities relevant for enterprise/business adoption\n* Breakthroughs or research developments with business applications\n* Funding rounds, partnerships, product launches, executive moves\n* Policy or regulatory updates affecting AI business adoption\n\nStrict Rules for Business-Relevant News\n1. Mandatory Business Focus\n    * Only include news items meeting at least one of these criteria:\n        * New AI tools, platforms, or services launched for enterprise use\n        * Partnerships, collaborations, or integrations between AI companies and enterprises\n        * Funding rounds, acquisitions, or investments in AI tools or AI companies\n        * Product updates, SDK releases, or model features directly impacting enterprise adoption\n        * Policy, regulatory, or compliance updates affecting enterprise AI usage\n    * Exclude purely technical updates, academic research, or performance metrics unless explicitly tied to enterprise adoption\n2. Company and Model Coverage\n    * Include news from all major AI platforms: OpenAI, Anthropic, Microsoft, Google Gemini, NVIDIA, Y Combinator AI portfolio, and other enterprise-relevant AI labs\n    * Include news for major AI models only if the update impacts enterprise adoption, market application, or business functionality\n3. Content Formatting Rules\n    * Each news item must include:\n        * Headline (concise, business-relevant)\n        * Short summary (2–3 lines explaining enterprise relevance)\n        * Date (if available)\n        * Source (with clickable link)\n    * If a section has no major business updates, write: “No major business-related updates during this period.”\n4. Headline Relevance Enforcement\n    * Do not include headlines that are purely technical, experimental, or academic unless they clearly benefit enterprise adoption\n    * Prioritize headlines about: new tools, partnerships, funding, acquisitions, enterprise deployments, product releases\n5. Output Quantity & Quality\n    * Return top 20 latest AI news items, ensuring 100% business-relevant\n    * Include a mix of company-specific, model-specific, and AI tools industry updates\n6. Language & Tone Rules\n    * Use neutral, factual, concise language\n    * Do not include personal opinions, speculation, greetings, or commentary\n\nSections and Guidelines\n1. Latest AI Breakthroughs\n    * Include only breakthroughs with enterprise or business relevance\n2. Model Updates and Leaderboard Changes\n    * Include benchmark updates or new capabilities only if relevant for enterprise adoption or market impact\n3. Model Tuning for Use Cases\n    * Highlight LoRA, PEFT, instruction tuning, adapter-based methods only when applied to business/enterprise scenarios\n4. Company-Specific AI News\n    * Cover OpenAI, Anthropic, Microsoft, Google Gemini, NVIDIA, Y Combinator AI portfolio, other labs — only business-relevant announcements\n5. Summary\n    * Bullet-point digest of top 10–15 news items, each with headline, summary, date, source, and enterprise relevance\n\nAdditional Notes\n* Search across all AI models and platforms, not just one\n* Ensure a mix of model updates and business-relevant news\n* Do not stop early or include unverified/speculative content\n* Exclude greetings, introductions, or closings — factual news only\n* Ensure every news item explains why it matters to businesses or clients\n\n### Important research instructions to always include:\n* New enterprise AI tools and platforms\n* Partnerships, collaborations, integrations\n* Funding rounds, acquisitions, or investments\n* Product updates / SDK releases with enterprise relevance\n* Ensure all major AI companies/platforms are covered (OpenAI, Anthropic, Microsoft, Google Gemini, NVIDIA, YC AI startups, other labs).\n* Force a minimum of 20 top business-relevant AI news items, mixing company-specific, model-specific, and tool/industry updates.\n* Do not include general news, only include AI trend news which is giving update for AI trend news of AI models.\n* Covered Business-relevant AI news should be directly point to the AI model.\n* Do not include unverified/speculative content or news.\n* Always exclude Non major or non verified AI news.\n`;\n\nreturn { json: { prompt } };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -832,
+        3472
+      ],
+      "id": "9e6bc435-b5ba-4a62-8991-bb5219595af5",
+      "name": "News Prompt with Dynamic Date1"
+    },
+    {
+      "parameters": {
+        "url": "https://n8n.c1m.ai/webhook/e37bf3a1-6cf2-48ea-a8c1-7c96e436e1d6",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "propertyId",
+              "value": "188375"
+            },
+            {
+              "name": "sourceAgent",
+              "value": "Skill-Asana-Wordpress-AI-News-Post-Task-Analyser"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -160,
+        3472
+      ],
+      "id": "39c4c05a-8297-4701-ad1c-0befcb0f20b4",
+      "name": "Invokes TOOL-GetMemory1",
+      "notesInFlow": true,
+      "executeOnce": false,
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8bf2d429-f4b3-4f91-87ce-2bcebdbf1b71",
+              "leftValue": "={{ $json.PostTitle }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "15b58403-b379-4d70-b907-76b34e778661",
+              "leftValue": "={{ $json.PostContent }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1136,
+        3456
+      ],
+      "id": "986c2f2f-9b58-47e9-ab7e-ed36203a3a2f",
+      "name": "Validate WordPress Payload1"
+    },
+    {
+      "parameters": {
+        "content": "## weekly Trigger\n\n* **Type:** Schedule Trigger (`n8n-nodes-base.scheduleTrigger`)\n* **Function:** This node triggers the workflow **weekly**, specifically every ** weeks**.\n* **Trigger Day:** It is set to trigger on **Thursday** (`triggerAtDay: [4]`, where 0 = Sunday).\n\n\n#### **Purpose:**\n\nThis node is used to start the workflow automatically every second Thursday, based on a biweekly schedule. It is useful for tasks that need to be performed on a regular two-week cycle (e.g., reporting, reminders, data syncs).\n\n",
+        "height": 576,
+        "width": 576,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1536,
+        3088
+      ],
+      "typeVersion": 1,
+      "id": "866bb69d-e03f-49f0-86c8-eeefb60ad4a7",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://admin.n8n.c1m.ai/webhook/7fd5766d-c2de-47c5-8e5a-df80535a7ad3",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3232,
+        3760
+      ],
+      "id": "b30717e6-fa6b-4e53-b7b8-040be68ecaed",
+      "name": "Invoke TOOL-LogEvent1",
+      "notesInFlow": true,
+      "retryOnFail": true,
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  propertyId: 188375,\n  serviceId: $workflow.id,\n  serviceName: \"AGENT-News–Biweekly\",\n  executionDatetime: new Date().getTime(),\n  executionId: $execution.id,\n  executionState: $input.first().json.executionState,\n  data: JSON.stringify({\n    type: $input.first().json.executionState,\n    content: $input.first().json.body\n  }),\n  metadata: $input.first().json.metaData,\n  workflowCreator: \"ppatel@c1m.ai\"\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3008,
+        3760
+      ],
+      "id": "d639f0c3-85d8-4ab3-898c-8028c9e40a67",
+      "name": "Prepare payload for TOOL-LogEvent1",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "12585a9c-670a-4899-8942-7e5475032f34",
+              "name": "executionState",
+              "value": "=Start",
+              "type": "string"
+            },
+            {
+              "id": "7e72557e-fccf-44e2-98f3-15f910a2a38c",
+              "name": "body",
+              "value": "={{ $json }}",
+              "type": "string"
+            },
+            {
+              "id": "0ff45e5c-0fb2-4b91-8e2f-52ed1620f0b2",
+              "name": "metaData",
+              "value": "{executedNode: \"Biweekly Trigger\"}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        4368
+      ],
+      "id": "2a062eca-7e19-4429-88dc-2057ca1dcf68",
+      "name": "Start execution1"
+    },
+    {
+      "parameters": {
+        "content": "## Log Event Workflow\n\n**1. Prepare Payload for TOOL‑LogEvent**\n\n* Uses a **Code node** (`Prepare payload for TOOL‑LogEvent`) to build a structured JSON payload that includes metadata like workflow ID, execution info, custom data, and request body details.\n\n**2. Invoke TOOL‑LogEvent**\n\n* Uses an **HTTP Request node** (`Invoke TOOL‑LogEvent`) to send that payload as a **POST** request to an external webhook endpoint for logging or monitoring.\n* Both nodes are configured with `onError: continueRegularOutput`, ensuring the workflow continues even if errors occur.\n\n### **Purpose and Flow**\n\n* The first node gathers and formats key execution data.\n* The second node transmits this data to a remote logging endpoint.\n* This setup facilitates **automated logging** while maintaining workflow resilience.\n",
+        "height": 1696,
+        "width": 1072
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2368,
+        2848
+      ],
+      "typeVersion": 1,
+      "id": "c4b8515d-4496-4436-b621-0992d0f34264",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "12585a9c-670a-4899-8942-7e5475032f34",
+              "name": "executionState",
+              "value": "=Error",
+              "type": "string"
+            },
+            {
+              "id": "7e72557e-fccf-44e2-98f3-15f910a2a38c",
+              "name": "body",
+              "value": "={{ $json  }}",
+              "type": "string"
+            },
+            {
+              "id": "0ff45e5c-0fb2-4b91-8e2f-52ed1620f0b2",
+              "name": "metaData",
+              "value": "={executedNode: \"Invokes TOOL-GetMemory\"}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        4176
+      ],
+      "id": "1024e3cc-8255-4e47-92e4-c9094d563218",
+      "name": "Error on Invoke summary1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "12585a9c-670a-4899-8942-7e5475032f34",
+              "name": "executionState",
+              "value": "=Error",
+              "type": "string"
+            },
+            {
+              "id": "7e72557e-fccf-44e2-98f3-15f910a2a38c",
+              "name": "body",
+              "value": "={{ $json }}",
+              "type": "string"
+            },
+            {
+              "id": "0ff45e5c-0fb2-4b91-8e2f-52ed1620f0b2",
+              "name": "metaData",
+              "value": "={executedNode: \"Draft Wordpress Post\"}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        4000
+      ],
+      "id": "c757964e-9da4-4c91-8c90-8309a4ecc395",
+      "name": "Error on Create Post1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "12585a9c-670a-4899-8942-7e5475032f34",
+              "name": "executionState",
+              "value": "=Error",
+              "type": "string"
+            },
+            {
+              "id": "7e72557e-fccf-44e2-98f3-15f910a2a38c",
+              "name": "body",
+              "value": "=Post title and content are Empty (AI node issue)",
+              "type": "string"
+            },
+            {
+              "id": "0ff45e5c-0fb2-4b91-8e2f-52ed1620f0b2",
+              "name": "metaData",
+              "value": "={executedNode: \"Validate WordPress Payload\"}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        3824
+      ],
+      "id": "09678f98-4db2-41dd-8e1c-429e14eff018",
+      "name": "Empty title and content1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "12585a9c-670a-4899-8942-7e5475032f34",
+              "name": "executionState",
+              "value": "=Error",
+              "type": "string"
+            },
+            {
+              "id": "7e72557e-fccf-44e2-98f3-15f910a2a38c",
+              "name": "body",
+              "value": "={{ $json }}",
+              "type": "string"
+            },
+            {
+              "id": "0ff45e5c-0fb2-4b91-8e2f-52ed1620f0b2",
+              "name": "metaData",
+              "value": "={executedNode: \"TOOL-Project-Task-Create\"}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        3648
+      ],
+      "id": "9406ee7a-c1f3-42ff-aa80-6a8b5266deb7",
+      "name": "Error on Asana task creation1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "12585a9c-670a-4899-8942-7e5475032f34",
+              "name": "executionState",
+              "value": "=Complete",
+              "type": "string"
+            },
+            {
+              "id": "7e72557e-fccf-44e2-98f3-15f910a2a38c",
+              "name": "body",
+              "value": "={{ $json }}",
+              "type": "string"
+            },
+            {
+              "id": "0ff45e5c-0fb2-4b91-8e2f-52ed1620f0b2",
+              "name": "metaData",
+              "value": "{executedNode: \"TOOL-Project-Task-Create\"}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        3456
+      ],
+      "id": "8869c06d-5df1-4b57-96e0-9728579fa16e",
+      "name": "End execution1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {summary_text: $input.last().json.summary_text};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        3456
+      ],
+      "id": "6690d335-da9e-4a09-810f-c78b940ca725",
+      "name": "Get latest summary1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.c1m.ai/webhook/8bff9ac8-2daf-402d-b36b-a6afbeefa4fa",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1344,
+        3440
+      ],
+      "id": "03178302-3bd7-4ff4-9e1c-a4598cd5bc5a",
+      "name": "Invoke Tool-Create-WordPress-Post-ImageOptional",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "model": "gpt-image-1",
+        "prompt": "=Show: {{ $json.output.image_prompt }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        464,
+        3456
+      ],
+      "id": "f2db862d-7557-4034-83c7-a5012d87a681",
+      "name": "Generate an image",
+      "credentials": {
+        "openAiApi": {
+          "id": "36JIN05MMnYNb9V9",
+          "name": "OpenAi account - N8N - JMAII"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        128,
+        3616
+      ],
+      "id": "5de72a7f-85f1-4b48-aa71-2f117597bea8",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "WYcFEAqXniSxcDES",
+          "name": "OpenAi account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=SOURCE CONTENT (Start)\nLatest AI Trend News: {{ $('Fact Checking1').first().json.message }}\nSOURCE CONTENT (End)",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=C1M AI Blog Content Generation Prompt (Strict Source-Based)\nYou are an expert SEO strategist and AI content writer. Your role is to create high-impact, evergreen blog content that ranks competitively and strictly reflects the C1M brand voice, based exclusively on the provided AI News Content.\nThe blog content must include a dedicated section explaining the business implications of the news, framed as \"Why This Matters\" or a similar title. Focus on AI developments with clear business applications (finance, marketing, workflow automation), reflecting a strategic focus on the \"future of work.\"\nImportant:\n* Do not use search engines, external data, pretrained assumptions, or prior knowledge.\n* Only extract and reference information explicitly found in the provided source text.\nPerform the following three tasks using only the supplied AI News Content. Do not generate or assume any facts, events, or details not found in the input.\n\nTask 1: SEO Strategy (Strict Source-Based)\nAnalyze the provided input content only and extract:\n* 5–7 primary SEO keywords explicitly mentioned or implied by terms within the input.\n* 5–10 long-tail or semantically related keywords — based only on language found in the input.\n* Recommended target word count based strictly on internal thematic complexity and competitive scope inferred from the source content.\nSEO Optimization Guidelines:\n* Keyword density: 1–2% for primary keywords; integrate naturally.\n* Semantic SEO: Use synonyms and context only if they appear in or are logically derivable from the input.\n* Header strategy: Follow semantic structure (<h1> to <h4>).\n* Meta writing: Use primary keywords in the first 160 characters for meta description.\n* Timeless framing: Avoid date-based terms unless present in the source.\nExtra Rules for SEO strategist and AI content writer (Strict):\n{{ $json.summary_text || 'No extra rules' }}\n\nTask 2: Blog Post Draft (Strict Source-Based)\nUsing only Task 1 insights and the source content, write a fully SEO-optimized WordPress blog post that aligns with the following standards:\nTitle Guidelines:\n* ≤70 characters\n* Includes 1–2 primary SEO keywords from the input\n* No dates or temporal language unless present in the source\n* Evergreen, strategic formats: How X Transforms Y, The Future of Z, Inside the Evolution of A, Why B Matters for C.\n* Do not always start title from \"How\" word.\n\nC1M Brand Voice & Style (Mandatory)\nTone & Personality:\n* Confident, knowledgeable, innovative, approachable, supportive\n* Positions C1M as expert partner blending human insight + AI innovation\n* Optimistic, future-focused — encourages readers to embrace transformation\n* Speaks with authority rooted in 20+ years of experience\n* Solution-oriented, turning challenges into opportunities\n* Concise, consultative tone: clear explanations, straightforward breakdowns of complex AI/agentic concepts\n* Business-oriented voice: avoids overly academic language, keeps focus on practical applications and business value\n* Educational style: explains definitions, mechanics, and outcomes with reader-friendly clarity\nWriting Style & Language:\n* Directly addresses reader: “you” / “your”\n* Uses inclusive “we” / “let’s”\n* Active voice with strong verbs: accelerate, optimize, harness, drive\n* Results-focused: growth, success, competitive advantage\n* Conversational but authoritative\n* Educates with clear examples and actionable insights\nBlog Post Guidelines:\n* Hook readers with relatable challenges, trends, or questions\n* Problem/solution framing\n* Use examples, scenarios, storytelling\n* Organize with clear headings, subheadings, and lists\n* Focus on client benefits, not self-promotion\n* End with subtle CTA positioning C1M as a helpful partner\nDo’s / Don’ts:\n✔ Speak as a partner (“we’ll help you…”) ✔ Positive, action-oriented, solution-focused ✔ Highlight measurable outcomes ✔ Professional yet approachable ✔ Explain technical concepts simply ✘ Avoid jargon/slang or overly casual tone ✘ Don’t hard-sell or focus only on C1M ✘ Avoid dwelling on negativity ✘ Avoid vague or generic statements\n\nBlog Structure: (All points and sections must be strictly relevant to the latest AI trend news. and use keywords to generate an content and heighlight the keywords.)\n1. Introduction (80–100 words)\n    * Hook the reader with a relatable AI trend or business challenge.\n    * Include primary keywords.\n    * Keep concise, solution-oriented, and client-focused.\n2. Breakdown of Key Concepts (up to 170 words)\n    * Explain technical terms in business-friendly language.\n    * Cover only essential concepts relevant to the AI news.\n    * Avoid deep technical detail; focus on practical understanding.\n3. 5 AI News Stories (85–120 words each)\n    * Each story should highlight:\n        * What happened\n        * Business implications / enterprise relevance\n    * Avoid excessive technical specifications or long explanations.\n    * Use a consistent, concise format for readability.\n4. Why This Matters (150–175 words)\n    * Dedicated section explaining business and strategic implications.\n    * Frame in context of future of work, workflow automation, AI adoption, or enterprise impact.\n    * Include actionable insights or scenarios showing value.\n5. Conclusion / CTA (85-100 words)\n    * Summarize key takeaways.\n    * Encourage exploration or adoption of AI.\n    * Include branded CTA: e.g., link to http://c1mdev.com/c1m.ai/consultation-request labeled \"Contact us\"\n6. Take reference for blog structure and content framing from this blog post:https://c1m.ai/how-strategic-ai-partnerships-and-proprietary-models-drive-the-future-of-work/\n\nTone and Relevance:\n* Concise, professional, business-oriented\n* Avoid unnecessary technical jargon\n* Ensure content directly relates to service/business AI applications\n\nWord Count Enforcement (Strict):\n* Minimum 1500 words (excluding tags, spaces, special characters)\n* Expand sections with examples, scenarios, explanations, or case studies to meet the \n\nword count\n* Do not stop early; do not remove content to shorten\n* No FAQs unless explicitly required\n\nContent Strict Rules (Must follow):\n* Always cover 5 trend news that will include 3 AI Model Update news and 2 business-relevant AI news updates.\n* Covered Business-relevant AI news should be directly point to the AI ​​model.\n* Remove extra sections like “Bringing it all Together” or “Outcomes”\n* Reduce technical depth (skip tokens, Mixture-of-Experts, etc.)\n* Highlight practical business benefits: improved engagement, workflow automation, scalable infrastructure, cost/IP efficiency\n* Always content have to cover.\n* Do not include unverified/speculative content or news.\n* Always exclude Non major or non verified AI news.\n* Generate content only for the major and verified AI news.\n* Always use a random seed factor for the opening sentence that suits the post content. Do not use \"In today’s\" as opening sentence.\n\nHere's the modified and enhanced version of your image prompt generation rules:\n\n---\n\n### Image Prompt Generation Rules\n\n**Core Requirements:**\n1. Generate **one single image prompt** based strictly on the covered headlines and overall theme of the content\n2. The image must be **realistic, meaningful, and thematically aligned** with the core topic\n3. **NO robots** to represent AI topics (use abstract concepts, human-centered visuals if content relates to humans, or subject-specific imagery)\n4. **NO text, labels, or typography** in the image\n5. **DO NOT include the blog title** in the image prompt\n\n**Uniqueness Enforcement:**\n6. Each image prompt MUST ensure maximum visual diversity across ALL these dimensions:\n   - **Environment style**: Rotate between modern, minimalistic, industrial, luxury, rustic, futuristic, clinical, artistic, organic, cyberpunk, vintage, ethereal, etc.\n   - **Camera angle**: Vary between aerial/bird's eye, low angle, eye-level, Dutch angle, over-the-shoulder, macro, wide-angle, etc.\n   - **Lighting**: Alternate between golden hour, blue hour, harsh shadows, soft diffused, rim lighting, silhouette, neon glow, natural window light, dramatic chiaroscuro, etc.\n   - **Composition**: Change rule of thirds placement, symmetry vs. asymmetry, foreground/background depth, negative space usage, leading lines, framing techniques\n   - **Mood**: Shift between contemplative, energetic, mysterious, calm, tense, hopeful, sterile, warm, cold, dynamic, etc.\n   - **Subject placement**: Vary positioning (center, off-center, edges, background, foreground)\n   - **Color palette**: Rotate through warm tones, cool tones, monochromatic, high contrast, muted, vibrant, pastel, etc.\n\n**Composition Diversity Strategies:**\n7. Rotate through different visual approaches:\n   - Scene-based (environmental storytelling)\n   - Object-focused (detailed close-ups with context)\n   - Conceptual/abstract (symbolic representation)\n   - Action-oriented (dynamic moment capture)\n   - Atmospheric (mood-driven environmental shots)\n\n**Output Format:**\n8. Final output MUST include:\nFinal output MUST include this key: \"image_prompt\": \"<the final rewritten prompt guaranteed different>\"\n```\n\n**Quality Standards:**\n9. The prompt should be **50-100 words** with specific visual details\n10. Include concrete descriptors for: setting, lighting, perspective, color scheme, and focal elements\n11. Ensure the prompt is **photographically feasible** and realistic\n\n\nOutput Format (Strict JSON Structur)\n\n{\n  \"SEO\": {\n    \"main_keywords\": [\"keyword1\", \"keyword2\", \"...\"],\n    \"related_keywords\": [\"related keyword1\", \"related keyword2\", \"...\"],\n    \"target_word_count\": number,\n    \"covered_headlines\": [\"List of AI news headlines covered in the blog post\"]\n  },\n  \"post_details\": {\n    \"post\": \"<html formatted blog content as string>\",\n    \"title\": \"An SEO-friendly, evergreen blog post title (under 70 characters).\"\n  },\n  \"image_prompt\": \"The image prompt **must generate an image that is strictly relevant to the blog post content**, with no unrelated or generic AI visuals.\"\n}\n\nQA Checklist (Must Pass)\n* Always cover 5 trend news that will include 3 AI Model Update news and 2 business-relevant AI news updates.\n* Covered Business-relevant AI news should be directly point to the AI ​​model.\n* Only data from source content\n* Follows C1M brand voice explicitly\n* SEO strategy strictly source-based\n* Blog teaches strategic value, not just summary\n* Outcomes and human + AI balance are clear\n* Subtle, supportive CTA closes post\n* Includes dedicated \"Why This Matters\" section\n* Prioritizes business-related AI developments\n* CTA links to http://c1mdev.com/c1m.ai/consultation-request labeled \"Contact us\"\n* The image prompt **must follow all Image Prompt Rules**.\n* Blog post should have structure and content framing like this blog post:https://c1m.ai/how-strategic-ai-partnerships-and-proprietary-models-drive-the-future-of-work/\n* Do not include general news, only include AI trend news which is giving update for AI trend news of AI models.\n* Do not include unverified/speculative content or news.\n* Always exclude Non major or non verified AI news.\n* Always place a random seed factor for the opening sentence\n\n### Important content generation instructions to always include:\n* Ensure the “Why This Matters” section connects every news item to enterprise/business impact.\n* Keep strict source-based rules but reinforce: “Only include news items with direct business implications, partnerships, funding, or enterprise deployment relevance.”\n* Always exclude Non major or non verified AI news.\n* Generated content should include only the major and verified AI news."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        144,
+        3456
+      ],
+      "id": "f76bec3a-d156-4efc-95c8-5feea87c8263",
+      "name": "SEO strategist and AI content writer1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"SEO\": {\n    \"main_keywords\": [\"keyword1\", \"keyword2\", \"...\"],\n    \"related_keywords\": [\"related keyword1\", \"related keyword2\", \"...\"],\n    \"target_word_count\": 1500,\n    \"covered_headlines\": [\"List of AI news headlines covered in the blog post\"]\n  },\n  \"post_details\": {\n    \"post\": \"<html formatted blog content as string>\",\n    \"title\": \"An SEO-friendly, evergreen blog post title (under 70 characters).\"\n  },\n  \"image_prompt\": \"The image prompt **must generate an image that is strictly relevant to the blog post content**, with no unrelated or generic AI visuals.\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        304,
+        3616
+      ],
+      "id": "fe3836d4-127e-4fbb-bada-ea477323bd00",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "74eb3767-f287-413e-8104-27aadf40089f",
+              "name": "uniqueId",
+              "value": "={{ $('Invoke Tool-Create-WordPress-Post-ImageOptional').first().json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "a7f29bc6-f8c1-4695-b426-544f45e035ac",
+              "name": "assignTo",
+              "value": "=Pankaj Patel",
+              "type": "string"
+            },
+            {
+              "id": "94edf282-ad1f-4546-b350-965745e98bc0",
+              "name": "workflowName",
+              "value": "Agent-Create-WordPress-WeeklyAINewsPost",
+              "type": "string"
+            },
+            {
+              "id": "f39378ad-139f-4c4e-8042-b75cde492fe3",
+              "name": "messageSource",
+              "value": "agent",
+              "type": "string"
+            },
+            {
+              "id": "7c71a965-0dff-4073-ae07-07f7e5ea4b5c",
+              "name": "message",
+              "value": "={{ $json.data.notes }}",
+              "type": "string"
+            },
+            {
+              "id": "4765599e-b668-4c3f-b0ff-da9bcfe069f2",
+              "name": "dateTime",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2272,
+        3280
+      ],
+      "id": "dc30dc5e-9243-4990-b397-81f4e24a245b",
+      "name": "Prepare payload for HITL logging"
+    },
+    {
+      "parameters": {
+        "resource": "channelMessage",
+        "teamId": {
+          "__rl": true,
+          "value": "d8e6980b-f4cd-4a4e-9b02-2d3571421afb",
+          "mode": "list",
+          "cachedResultName": "C1M.APP / Client Support"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "19:5bb9d97f018d4272a067c6d24c6a1971@thread.skype",
+          "mode": "list",
+          "cachedResultName": "Operations and Management",
+          "cachedResultUrl": "https://teams.cloud.microsoft/l/channel/19%3A5bb9d97f018d4272a067c6d24c6a1971%40thread.skype/Operations%20and%20Management?groupId=d8e6980b-f4cd-4a4e-9b02-2d3571421afb&tenantId=743b7cad-0211-4b17-8f29-c3124139a640&allowXTenantAccess=False"
+        },
+        "message": "This is a test message",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftTeams",
+      "typeVersion": 2,
+      "position": [
+        -1008,
+        2400
+      ],
+      "id": "571d3a93-a60d-45e3-80ef-f6487e46b5e1",
+      "name": "Create message",
+      "webhookId": "d14ae281-4bcf-43ad-b593-695a87838990",
+      "credentials": {
+        "microsoftTeamsOAuth2Api": {
+          "id": "fsV6OFxXPTE6IN3K",
+          "name": "Microsoft Teams account 2"
+        }
+      },
+      "disabled": true
+    }
+  ],
+  "pinData": {
+    "Weekly Trigger": [
+      {
+        "json": {
+          "timestamp": "2025-11-27T04:33:10.146-05:00",
+          "Readable date": "November 27th 2025, 4:33:10 am",
+          "Readable time": "4:33:10 am",
+          "Day of week": "Thursday",
+          "Year": "2025",
+          "Month": "November",
+          "Day of month": "27",
+          "Hour": "04",
+          "Minute": "33",
+          "Second": "10",
+          "Timezone": "America/New_York (UTC-05:00)"
+        }
+      }
+    ],
+    "Fact Checking1": [
+      {
+        "json": {
+          "id": "fe66b3f5-0bbf-4e4f-a57c-a3c464759bb8",
+          "created": 1764236060,
+          "citations": [
+            "https://www.news4jax.com/business/2025/11/25/alibabas-cloud-business-revenue-soars-34-driven-by-ai-boom/"
+          ],
+          "message": "Here is a fact-checked version of the news report, including only items verified by the provided citations or official public sources. Unverified or unsupported claims have been excluded.\n\n---\n\n### Latest AI Breakthroughs with Enterprise Relevance\n\nHeadline: Agentic AI for Enterprise Orchestration by C3 AI  \nSummary: C3 AI detailed how Agentic AI combines autonomous agents with enterprise orchestration to deliver more adaptable, transparent, and scalable intelligence for business workflows, enabling enterprises to automate decision-making with higher reliability.  \nDate: Nov 25, 2025  \nSource: [Radical Data Science Bulletin Board](https://radicaldatascience.wordpress.com/2025/11/21/ai-news-briefs-bulletin-board-for-november-2025/)\n\nHeadline: Google Gemini 3.0 Pro Launch for Enterprise Users  \nSummary: Google quietly released Gemini 3.0 Pro to select enterprise customers, enhancing workplace AI with trillion-parameter power and improved cybersecurity features tailored to business environments.  \nDate: Late Nov 2025  \nSource: [AI Plain English Analysis](https://ai.plainenglish.io/october-november-2025-the-ai-landscape-just-fundamentally-shifted-d1bc66c03464), [ETC Journal](https://etcjournal.com/2025/11/13/three-biggest-ai-stories-in-nov-2025-ai-is-no-longer-siloed/)\n\nHeadline: OpenAI’s GPT-5.1 Release with Enhanced Reasoning and Real-Time Application Features  \nSummary: OpenAI launched GPT-5.1, featuring models optimized for instant responsiveness (“GPT-5.1 Instant”) and advanced reasoning (“GPT-5.1 Thinking”), improving instruction adherence and intelligence persistence in complex business scenarios.  \nDate: Mid-November 2025  \nSource: [Radical Data Science Bulletin Board](https://radicaldatascience.wordpress.com/2025/11/21/ai-news-briefs-bulletin-board-for-november-2025/), [TST Technology](https://tsttechnology.io/blog/ai-tech-news-mid-november)\n\n---\n\n### Model Updates and Market Impact\n\nHeadline: Claude Haiku 4.5 Released by Anthropic for Real-Time Enterprise Use  \nSummary: Anthropic unveiled Claude Haiku 4.5, a lightweight model designed specifically for real-time enterprise applications, enhancing responsiveness and lowering latency in customer service and transactional systems.  \nDate: November 2025  \nSource: [AI Plain English Analysis](https://ai.plainenglish.io/october-november-2025-the-ai-landscape-just-fundamentally-shifted-d1bc66c03464)\n\nHeadline: Grok 4.1 Tops AI Leaderboards with Reduced Hallucinations for Info-Seeking Tasks  \nSummary: Grok 4.1, OpenAI’s experimental reasoning-optimized model, showed market-leading performance in reducing misinformation, marking improvements in reliability critical for business decision support systems.  \nDate: November 2025  \nSource: [The Automated Daily Podcast](https://theautomateddaily.com/e/ai-news-for-nov-19-2025/)\n\nHeadline: Google Home Upgraded with AI Enhancements Supporting Enterprise IoT Integration  \nSummary: Google upgraded Google Home devices with AI functionalities that enhance integration with enterprise Internet-of-Things (IoT) ecosystems, promising streamlined device management for corporate clients.  \nDate: October-November 2025 (reported Nov)  \nSource: [ETC Journal](https://etcjournal.com/2025/11/13/three-biggest-ai-stories-in-nov-2025-ai-is-no-longer-siloed/)\n\n---\n\n### Model Tuning and Use Case Adaptations\n\nHeadline: FP8 Precision Reinforcement Learning Speeds Up AI Inference on Consumer GPUs  \nSummary: Introduction of FP8 precision training for reinforcement learning (RL) workloads allows enterprises to run RL models more efficiently on affordable NVIDIA RTX 40/50 GPUs, reducing AI infrastructure costs for business applications.  \nDate: Nov 25, 2025  \nSource: [Radical Data Science Bulletin Board](https://radicaldatascience.wordpress.com/2025/11/21/ai-news-briefs-bulletin-board-for-november-2025/)\n\n---\n\n### Company-Specific AI Business News\n\nHeadline: Alibaba Cloud Business Revenue Surges 34% Driven By AI Demand  \nSummary: Alibaba’s cloud unit posted a 34% revenue increase, driven by growing adoption of AI services across Asia, underscoring the accelerating enterprise shift toward AI-powered cloud solutions.  \nDate: November 2025  \nSource: [Dunya News](https://dunyanews.tv/en/Business/919996-alibabas-cloud-business-revenue-soars-34-driven-by-ai-boom)\n\nHeadline: Cloudflare Acquires Replicate to Enhance AI Model Deployment for Enterprises  \nSummary: Cloudflare’s acquisition of Replicate strengthens its AI model serving platform, enabling easier, scalable, and secure AI application deployments aligned with enterprise cloud needs.  \nDate: November 2025  \nSource: [The Automated Daily Podcast](https://theautomateddaily.com/e/ai-news-for-nov-19-2025/)\n\nHeadline: Microsoft's Strategic Hiring to Boost AI Research for Practical Enterprise Tools  \nSummary: Microsoft announced strategic recruitment of top AI talent from global labs, focusing on building practical, user-centric AI tools rather than open-ended general intelligence systems, signaling a focus on enterprise productivity.  \nDate: Mid-November 2025  \nSource: [TST Technology](https://tsttechnology.io/blog/ai-tech-news-mid-november)\n\nHeadline: Apple and Google Partnership to Integrate Gemini AI into Siri  \nSummary: Apple reportedly collaborates with Google to power Siri using Google’s Gemini AI model, aiming to enhance voice assistant capabilities for enterprise and consumer users with trillion-parameter model efficiency at device level.  \nDate: November 2025  \nSource: [ETC Journal](https://etcjournal.com/2025/11/13/three-biggest-ai-stories-in-nov-2025-ai-is-no-longer-siloed/)\n\nHeadline: Naver and Dunamu Announce Nearly $7 Billion Investment in AI and Web3  \nSummary: South Korean firms Naver and Dunamu announced a significant funding plan (~$7B) targeting AI and Web3 development, signaling Asia's strong competitive stake in enterprise AI innovation.  \nDate: Nov 2025  \nSource: [YouTube AI Headline News](https://www.youtube.com/watch?v=cv7mOA_qSE0)\n\n---\n\n### New Enterprise AI Tools and Platforms\n\nHeadline: AI Apps Platform Expands to Over 1,000 Verified AI Tools for Business Use  \nSummary: The AI Apps platform now hosts 1,000+ verified AI tools with enhanced filtering and premium options, facilitating enterprises’ discovery and adoption of AI functionalities spanning research, marketing, and creative production.  \nDate: November 2025  \nSource: [AI Apps Blog](https://www.aiapps.com/blog/ai-news-november-2025-breakthroughs-launches-trends/)\n\nHeadline: OpenAI Launches ‘Sora 2’ for Cinema-Quality 60-Second Video Creation  \nSummary: OpenAI released Sora 2, enabling enterprise customers to create high-quality, 60-second AI-generated videos, improving marketing and creative content workflows within business contexts.  \nDate: Late November 2025  \nSource: [AI Plain English](https://ai.plainenglish.io/october-november-2025-the-ai-landscape-just-fundamentally-shifted-d1bc66c03464)\n\nHeadline: OpenAI Introduces Atlas: AI-Powered Web Browser Challenging Google  \nSummary: OpenAI debuted Atlas, an AI-augmented browser targeting enterprise users with embedded AI research tools and productivity enhancements, challenging Google’s standard browser ecosystem.  \nDate: Late November 2025  \nSource: [AI Plain English](https://ai.plainenglish.io/october-november-2025-the-ai-landscape-just-fundamentally-shifted-d1bc66c03464)\n\nHeadline: New eBook: Neuroevolution for Creative AI Agent Design in Businesses  \nSummary: Sakana AI and Cognizant published a guide showcasing neuroevolution techniques for designing creative AI agents, providing frameworks for enterprises interested in adaptive, continuously improving AI systems.  \nDate: Nov 19, 2025  \nSource: [Radical Data Science Bulletin Board](https://radicaldatascience.wordpress.com/2025/11/21/ai-news-briefs-bulletin-board-for-november-2025/)\n\n---\n\n### Policy and Regulatory Updates\n\nHeadline: EU Delays AI Act, Trims GDPR for Better AI Business Adoption  \nSummary: European regulators postponed the AI Act and eased GDPR restrictions, aiming to balance data privacy with AI innovation potential, thus facilitating smoother AI adoption in enterprise environments.  \nDate: Late Nov 2025  \nSource: [The Automated Daily Podcast](https://theautomateddaily.com/e/ai-news-for-nov-19-2025/)\n\n---\n\n### Industry Benchmark and Market Trends\n\nHeadline: Shift Towards AI Infrastructure Battles with $100B+ Investments in November 2025  \nSummary: Combined investments exceeding $100 billion by AWS-OpenAI, Google, and others underline that AI infrastructure control is now the dominant factor shaping enterprise AI competition.  \nDate: November 2025  \nSource: [TST Technology](https://tsttechnology.io/blog/ai-tech-news-mid-november)\n\n---\n\nAll items above are verified by the provided citations and reflect major, enterprise-relevant AI news published between November 19 and November 27, 2025. Unverified claims and minor updates have been excluded to preserve factual integrity."
+        }
+      }
+    ],
+    "Invokes TOOL-GetMemory1": [
+      {
+        "json": {}
+      }
+    ],
+    "News Prompt with Dynamic Date1": [
+      {
+        "json": {
+          "prompt": "You are an expert, top AI news analyst. Your role is to collect the most recent, accurate AI news published between November 19, 2025 to November 27, 2025, and present it clearly with source links, dates, and business relevance.\nSources to Search\n1. Official company blogs and press rooms\n2. Research repositories (e.g., arXiv)\n3. Reputable tech media and industry news platforms\n4. Public benchmarks or model tracking dashboards\n5. Primary Priority: Search all AI trend news on FutureTools (https://www.futuretools.io/news) and CuriousRefuge (https://curiousrefuge.com/blog) first, then research:\n    * https://www.crescendo.ai/news/latest-ai-news-and-updates\n    * https://www.therundown.ai/\n    * https://www.superhuman.ai/\n    * https://theresanaiforthat.com/\n    * https://www.theneurondaily.com/\nPriority: Only news released in the past 1 week. Avoid : outdated, speculative, or unverified sources.\n\nFocus Areas\nCollect AI trend news for major AI models: GPT-5, Claude, Gemini, LLaMA, and others. Include only:\n* Model updates, enhancements, or new capabilities relevant for enterprise/business adoption\n* Breakthroughs or research developments with business applications\n* Funding rounds, partnerships, product launches, executive moves\n* Policy or regulatory updates affecting AI business adoption\n\nStrict Rules for Business-Relevant News\n1. Mandatory Business Focus\n    * Only include news items meeting at least one of these criteria:\n        * New AI tools, platforms, or services launched for enterprise use\n        * Partnerships, collaborations, or integrations between AI companies and enterprises\n        * Funding rounds, acquisitions, or investments in AI tools or AI companies\n        * Product updates, SDK releases, or model features directly impacting enterprise adoption\n        * Policy, regulatory, or compliance updates affecting enterprise AI usage\n    * Exclude purely technical updates, academic research, or performance metrics unless explicitly tied to enterprise adoption\n2. Company and Model Coverage\n    * Include news from all major AI platforms: OpenAI, Anthropic, Microsoft, Google Gemini, NVIDIA, Y Combinator AI portfolio, and other enterprise-relevant AI labs\n    * Include news for major AI models only if the update impacts enterprise adoption, market application, or business functionality\n3. Content Formatting Rules\n    * Each news item must include:\n        * Headline (concise, business-relevant)\n        * Short summary (2–3 lines explaining enterprise relevance)\n        * Date (if available)\n        * Source (with clickable link)\n    * If a section has no major business updates, write: “No major business-related updates during this period.”\n4. Headline Relevance Enforcement\n    * Do not include headlines that are purely technical, experimental, or academic unless they clearly benefit enterprise adoption\n    * Prioritize headlines about: new tools, partnerships, funding, acquisitions, enterprise deployments, product releases\n5. Output Quantity & Quality\n    * Return top 20 latest AI news items, ensuring 100% business-relevant\n    * Include a mix of company-specific, model-specific, and AI tools industry updates\n6. Language & Tone Rules\n    * Use neutral, factual, concise language\n    * Do not include personal opinions, speculation, greetings, or commentary\n\nSections and Guidelines\n1. Latest AI Breakthroughs\n    * Include only breakthroughs with enterprise or business relevance\n2. Model Updates and Leaderboard Changes\n    * Include benchmark updates or new capabilities only if relevant for enterprise adoption or market impact\n3. Model Tuning for Use Cases\n    * Highlight LoRA, PEFT, instruction tuning, adapter-based methods only when applied to business/enterprise scenarios\n4. Company-Specific AI News\n    * Cover OpenAI, Anthropic, Microsoft, Google Gemini, NVIDIA, Y Combinator AI portfolio, other labs — only business-relevant announcements\n5. Summary\n    * Bullet-point digest of top 10–15 news items, each with headline, summary, date, source, and enterprise relevance\n\nAdditional Notes\n* Search across all AI models and platforms, not just one\n* Ensure a mix of model updates and business-relevant news\n* Do not stop early or include unverified/speculative content\n* Exclude greetings, introductions, or closings — factual news only\n* Ensure every news item explains why it matters to businesses or clients\n\n### Important research instructions to always include:\n* New enterprise AI tools and platforms\n* Partnerships, collaborations, integrations\n* Funding rounds, acquisitions, or investments\n* Product updates / SDK releases with enterprise relevance\n* Ensure all major AI companies/platforms are covered (OpenAI, Anthropic, Microsoft, Google Gemini, NVIDIA, YC AI startups, other labs).\n* Force a minimum of 20 top business-relevant AI news items, mixing company-specific, model-specific, and tool/industry updates.\n* Do not include general news, only include AI trend news which is giving update for AI trend news of AI models.\n* Covered Business-relevant AI news should be directly point to the AI model.\n* Do not include unverified/speculative content or news.\n* Always exclude Non major or non verified AI news.\n"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Weekly Trigger": {
+      "main": [
+        [
+          {
+            "node": "News Prompt with Dynamic Date1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Start execution1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "upload_featured_image": {
+      "main": [
+        [
+          {
+            "node": "WordPress Payload1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WordPress Payload1": {
+      "main": [
+        [
+          {
+            "node": "Validate WordPress Payload1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TOOL-Project-Task-Create-Payload1": {
+      "main": [
+        [
+          {
+            "node": "TOOL-Project-Task-Create1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TOOL-Project-Task-Create1": {
+      "main": [
+        [
+          {
+            "node": "End execution1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare payload for HITL logging",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error on Asana task creation1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search latest AI Trend News1": {
+      "main": [
+        [
+          {
+            "node": "Fact Checking1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fact Checking1": {
+      "main": [
+        [
+          {
+            "node": "Invokes TOOL-GetMemory1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Assignee Id1": {
+      "main": [
+        [
+          {
+            "node": "TOOL-Project-Task-Create-Payload1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "News Prompt with Dynamic Date1": {
+      "main": [
+        [
+          {
+            "node": "Search latest AI Trend News1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invokes TOOL-GetMemory1": {
+      "main": [
+        [
+          {
+            "node": "Get latest summary1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error on Invoke summary1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate WordPress Payload1": {
+      "main": [
+        [
+          {
+            "node": "Invoke Tool-Create-WordPress-Post-ImageOptional",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Empty title and content1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare payload for TOOL-LogEvent1": {
+      "main": [
+        [
+          {
+            "node": "Invoke TOOL-LogEvent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start execution1": {
+      "main": [
+        [
+          {
+            "node": "Prepare payload for TOOL-LogEvent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error on Invoke summary1": {
+      "main": [
+        [
+          {
+            "node": "Prepare payload for TOOL-LogEvent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error on Create Post1": {
+      "main": [
+        [
+          {
+            "node": "Prepare payload for TOOL-LogEvent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Empty title and content1": {
+      "main": [
+        [
+          {
+            "node": "Prepare payload for TOOL-LogEvent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error on Asana task creation1": {
+      "main": [
+        [
+          {
+            "node": "Prepare payload for TOOL-LogEvent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "End execution1": {
+      "main": [
+        [
+          {
+            "node": "Prepare payload for TOOL-LogEvent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get latest summary1": {
+      "main": [
+        [
+          {
+            "node": "SEO strategist and AI content writer1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invoke Tool-Create-WordPress-Post-ImageOptional": {
+      "main": [
+        [
+          {
+            "node": "Set Assignee Id1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error on Create Post1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "SEO strategist and AI content writer1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO strategist and AI content writer1": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "SEO strategist and AI content writer1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "upload_featured_image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "18713cc0-d0b5-4b24-ada7-f09bba8deda9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cdb933c56d4d2fd569a441b2b7966e0e27d761306d8926e1440759978db55554"
+  },
+  "id": "0cMKFW2xuIpjLJsk",
+  "tags": [
+    {
+      "updatedAt": "2025-10-29T13:28:17.073Z",
+      "createdAt": "2025-10-29T13:28:17.073Z",
+      "id": "NGjUjwjNTtvJUj2M",
+      "name": "Scheduler"
+    }
+  ]
+}
